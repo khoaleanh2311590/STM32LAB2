@@ -160,6 +160,12 @@ void display7SEG(int num)
 		break;
 	}
 }
+void ClearAllClock(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -340,7 +346,50 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
+int counter=200;
+int counter1=200;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(counter1>100)
+	{
+		HAL_GPIO_WritePin(DOT_GPIO_Port, DOT_Pin, RESET);
+		counter1--;
+	}
+	if(counter1>0 && counter1<=100)
+	{
+		HAL_GPIO_WritePin(DOT_GPIO_Port, DOT_Pin, SET);
+		counter1--;
+		if(counter1<=0) counter1=200;
+	}
+	if(counter>150)
+	{
+		ClearAllClock();
+		HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+		display7SEG(1);
+		counter--;
+	}
+	if(counter>100)
+	{
+		ClearAllClock();
+		HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+		display7SEG(2);
+		counter--;
+	}
+	if(counter>50)
+	{
+		ClearAllClock();
+		HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
+		display7SEG(3);
+		counter--;
+	}
+	if(counter<=50 && counter>0)
+	{
+		ClearAllClock();
+		HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
+		display7SEG(0);
+		counter--;
+		if(counter<=0) counter=200;
+	}
+}
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
