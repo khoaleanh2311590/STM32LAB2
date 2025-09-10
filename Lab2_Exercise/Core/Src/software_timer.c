@@ -1,11 +1,12 @@
 #include "software_timer.h"
 #define MAX_TIMER 10
+#define TIMER_TICK 10
 int timer_counter[MAX_TIMER];
 int timer_flag[MAX_TIMER];
 
 //Set the counter for software timer
 void setTimer(int index, int duration){
-	timer_counter[index]=duration;
+	timer_counter[index]=duration/TIMER_TICK;
 	timer_flag[index]=0;
 }
 
