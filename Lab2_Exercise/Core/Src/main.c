@@ -388,9 +388,17 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-int counter=250;
+int counter=25;
+int counter1=100;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-
+	if(counter1>0)
+		//HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		counter1--;
+	if(counter1<=0)
+{
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		counter1=100;
+		}
 	if(counter>0)
 	{
 		update7SEG(index_led);
@@ -398,7 +406,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		if(counter<=0)
 		{
 			index_led++;
-			counter=250;
+			counter=25;
 		}
 		if(index_led>=MAX_LED) index_led=0;
 	}
