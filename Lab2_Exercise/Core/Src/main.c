@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "software_timer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,6 +50,7 @@ TIM_HandleTypeDef htim2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_TIM2_Init(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -62,6 +64,150 @@ static void MX_TIM2_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+void display7SEG(int num)
+{
+	switch(num)
+	{
+	case 0:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 1:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, SET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, SET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 4:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, SET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 5:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, SET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 6:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, SET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 7:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 8:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 9:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	}
+}
+void En0Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En1Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En2Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En3Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
+}
+const int MAX_LED=4;
+int index_led=0;
+int led_buffer[4]={1,2,3,4};
+void update7SEG(int index){
+	switch(index)
+	{
+	case 0:
+		En0Only();
+		display7SEG(led_buffer[0]);
+		break;
+	case 1:
+		En1Only();
+		display7SEG(led_buffer[1]);
+		break;
+	case 2:
+		En2Only();
+		display7SEG(led_buffer[2]);
+		break;
+	case 3:
+		En3Only();
+		display7SEG(led_buffer[3]);
+		break;
+	}
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -86,6 +232,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_TIM2_Init();
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
 
@@ -182,6 +329,47 @@ static void MX_TIM2_Init(void)
 
 }
 
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
+                          |EN2_Pin|EN3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin|LED6_Pin|LED7_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : DOT_Pin LED_RED_Pin EN0_Pin EN1_Pin
+                           EN2_Pin EN3_Pin */
+  GPIO_InitStruct.Pin = DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
+                          |EN2_Pin|EN3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin
+                           LED5_Pin LED6_Pin LED7_Pin */
+  GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin|LED6_Pin|LED7_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+}
+
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
@@ -200,10 +388,22 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
+int counter=250;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
-}
+	if(counter>0)
+	{
+		update7SEG(index_led);
+		counter--;
+		if(counter<=0)
+		{
+			index_led++;
+			counter=250;
+		}
+		if(index_led>=MAX_LED) index_led=0;
+	}
 
+}
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
