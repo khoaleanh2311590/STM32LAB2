@@ -250,8 +250,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   setTimer(0, 250);
-  setTimer(1, 1000);
-  updateClockBuffer();//Dùng để cập nhật led buffer do ko cập nhật nó sẽ hiện 0000 trước
+  setTimer(1, 10);
   while (1)
   {
     /* USER CODE END WHILE */
@@ -281,7 +280,6 @@ int main(void)
 	if(isTimerExpired(0)==0)
 	{
 		update7SEG(index_led);
-
 	}
 	if(index_led>=MAX_LED) index_led=0;
 
