@@ -6,7 +6,7 @@ int timer_flag[MAX_TIMER];
 
 //Set the counter for software timer
 void setTimer(int index, int duration){
-	timer_counter[index]=duration;
+	timer_counter[index]=duration/TIMER_CLICK;
 	timer_flag[index]=0;
 }
 

@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "software_timer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,6 +64,159 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+int hour=23, minute=59, second=50;
+void display7SEG(int num)
+{
+	switch(num)
+	{
+	case 0:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 1:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, SET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, SET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 4:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, SET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 5:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, SET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 6:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, SET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 7:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		break;
+	case 8:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	case 9:
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+		break;
+	}
+}
+void En0Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En1Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En2Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+}
+void En3Only(){
+	HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+	HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+	HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
+}
+const int MAX_LED=4;
+int index_led=0;
+int led_buffer[4];
+void update7SEG(int index){
+	switch(index)
+	{
+	case 0:
+		En0Only();
+		display7SEG(led_buffer[0]);
+		break;
+	case 1:
+		En1Only();
+		display7SEG(led_buffer[1]);
+		break;
+	case 2:
+		En2Only();
+		display7SEG(led_buffer[2]);
+		break;
+	case 3:
+		En3Only();
+		display7SEG(led_buffer[3]);
+		break;
+	}
+}
+void updateClockBuffer(){
+	led_buffer[0]=hour/10;
+	led_buffer[1]=hour%10;
+	led_buffer[2]=minute/10;
+	led_buffer[3]=minute%10;
+
+}
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -95,13 +249,46 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  setTimer(0, 250);
+  setTimer(1, 1000);
+  updateClockBuffer();//Dùng để cập nhật led buffer do ko cập nhật nó sẽ hiện 0000 trước
   while (1)
   {
     /* USER CODE END WHILE */
+	if(isTimerExpired(1)==1)
+	{
+		 second ++;
+		 if(second>=60){
+			 second=0;
+			 minute++;
+		 }
+		 if(minute>=60){
+			 minute=0;
+			 hour++;
+		 }
+		 if(hour>=24){
+			 hour=0;
+		 }
+		updateClockBuffer();
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		setTimer(1, 1000);
+	}
+	if(isTimerExpired(0)==1)
+	{
+		setTimer(0, 250);
+		index_led++;
+	}
+	if(isTimerExpired(0)==0)
+	{
+		update7SEG(index_led);
+
+	}
+	if(index_led>=MAX_LED) index_led=0;
 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
+
 }
 
 /**
@@ -243,7 +430,10 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	timerRun();
 
+}
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
