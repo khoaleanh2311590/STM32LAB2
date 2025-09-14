@@ -1,5 +1,6 @@
 #include "software_timer.h"
 #define MAX_TIMER 10
+#define TIMER_CLICK 10
 int timer_counter[MAX_TIMER];
 int timer_flag[MAX_TIMER];
 
