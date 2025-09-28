@@ -215,10 +215,41 @@ void updateClockBuffer(){
 	led_buffer[2]=minute/10;
 	led_buffer[3]=minute%10;
 }
+void clearAllLEDMatrix(){
+	HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, SET);
+	HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, SET);
+	HAL_GPIO_WritePin(ENM2_GPIO_Port, ENM2_Pin, SET);
+	HAL_GPIO_WritePin(ENM3_GPIO_Port, ENM3_Pin, SET);
+	HAL_GPIO_WritePin(ENM4_GPIO_Port, ENM4_Pin, SET);
+	HAL_GPIO_WritePin(ENM5_GPIO_Port, ENM5_Pin, SET);
+	HAL_GPIO_WritePin(ENM6_GPIO_Port, ENM6_Pin, SET);
+	HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, SET);
+}
 const int MAX_LED_MATRIX=8;
 int index_led_matrix=0;
 uint8_t matrix_buffer[8]={0x01 , 0x02 , 0x03 , 0x04 , 0x05 , 0x06 , 0x07 , 0x08};
+void clearAllMatrixCOL(){
+	HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, SET);
+	HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, SET);
+	HAL_GPIO_WritePin(ENM2_GPIO_Port, ENM2_Pin, SET);
+	HAL_GPIO_WritePin(ENM3_GPIO_Port, ENM3_Pin, SET);
+	HAL_GPIO_WritePin(ENM4_GPIO_Port, ENM4_Pin, SET);
+	HAL_GPIO_WritePin(ENM5_GPIO_Port, ENM5_Pin, SET);
+	HAL_GPIO_WritePin(ENM6_GPIO_Port, ENM6_Pin, SET);
+	HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, SET);
+}
+void clearAllMatrixROW(){
+	HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, SET);
+	HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, SET);
+	HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, SET);
+	HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, SET);
+	HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, SET);
+	HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, SET);
+	HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, SET);
+	HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, SET);
+}
 void updateLEDMatrix(int index){
+	clearAllMatrixCOL();
 	switch(index){
 	case 0:
 		HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, RESET);
@@ -246,11 +277,52 @@ void updateLEDMatrix(int index){
 		break;
 	}
 }
+void chuA(int index){
+	updateLEDMatrix(index);
+	clearAllMatrixROW();
+	switch(index){
+	case 0:
+		HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, RESET);
+		HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, RESET);
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		break;
+	case 1:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, RESET);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, RESET);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, RESET);
+		HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, RESET);
+		break;
+	case 4:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, RESET);
+		HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, RESET);
+		break;
+	case 5:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, RESET);
+		break;
+	case 6:
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, RESET);
+		break;
+	case 7:
+		HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, RESET);
+		HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, RESET);
+		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+		break;
+	}
+}
 
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -276,11 +348,11 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2);
 
   /* USER CODE END 2 */
-
+  updateClockBuffer();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer(0, 250);
-  setTimer(1, 10);
+  setTimer(0,50);
+  setTimer(1,100);
   while (1)
   {
     /* USER CODE END WHILE */
@@ -300,19 +372,26 @@ int main(void)
 		 }
 		updateClockBuffer();
 		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		setTimer(1, 1000);
 	}
 	if(isTimerExpired(0)==1)
 	{
 		setTimer(0, 250);
 		index_led++;
+		index_led_matrix++;
 	}
 	if(isTimerExpired(0)==0)
 	{
 		update7SEG(index_led);
+		chuA(index_led_matrix);
 	}
-	if(index_led>=MAX_LED) index_led=0;
-
+	if(index_led>=MAX_LED){
+		index_led=0;
+	}
+	if(index_led_matrix>=MAX_LED_MATRIX){
+		index_led_matrix=0;
+	}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -465,6 +544,11 @@ void Error_Handler(void)
   {
   }
   /* USER CODE END Error_Handler_Debug */
+}
+ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+{
+	 timerRun();
+// YOUR OTHER CODE
 }
 
 #ifdef  USE_FULL_ASSERT
