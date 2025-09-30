@@ -250,7 +250,6 @@ void clearAllMatrixROW(){
 }
 void updateLEDMatrix(int index){
     clearAllMatrixCOL();
-    clearAllMatrixROW();
     HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, (matrix_buffer[index]  & (0b00000001)) ? RESET : SET);
     HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, (matrix_buffer[index]  & (0b00000010)) ? RESET : SET);
     HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, (matrix_buffer[index]  & (0b00000100)) ? RESET : SET);
@@ -260,15 +259,41 @@ void updateLEDMatrix(int index){
     HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, (matrix_buffer[index]  & (0b01000000)) ? RESET : SET);
     HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, (matrix_buffer[index]  & (0b10000000)) ? RESET : SET);
     switch(index){
-        case 0: HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, RESET); break;
-        case 1: HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, RESET); break;
-        case 2: HAL_GPIO_WritePin(ENM2_GPIO_Port, ENM2_Pin, RESET); break;
-        case 3: HAL_GPIO_WritePin(ENM3_GPIO_Port, ENM3_Pin, RESET); break;
-        case 4: HAL_GPIO_WritePin(ENM4_GPIO_Port, ENM4_Pin, RESET); break;
-        case 5: HAL_GPIO_WritePin(ENM5_GPIO_Port, ENM5_Pin, RESET); break;
-        case 6: HAL_GPIO_WritePin(ENM6_GPIO_Port, ENM6_Pin, RESET); break;
-        case 7: HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, RESET); break;
+        case 0:
+        	HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, RESET);
+        	break;
+        case 1:
+        	HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, RESET);
+        	break;
+        case 2:
+        	HAL_GPIO_WritePin(ENM2_GPIO_Port, ENM2_Pin, RESET);
+        	break;
+        case 3:
+        	HAL_GPIO_WritePin(ENM3_GPIO_Port, ENM3_Pin, RESET);
+        	break;
+        case 4:
+        	HAL_GPIO_WritePin(ENM4_GPIO_Port, ENM4_Pin, RESET);
+        	break;
+        case 5:
+        	HAL_GPIO_WritePin(ENM5_GPIO_Port, ENM5_Pin, RESET);
+        	break;
+        case 6:
+        	HAL_GPIO_WritePin(ENM6_GPIO_Port, ENM6_Pin, RESET);
+        	break;
+        case 7:
+        	HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, RESET);
+        	break;
     }
+}
+void ShiftToTheLeft(){
+	matrix_buffer[0]=matrix_buffer[1];
+	matrix_buffer[1]=matrix_buffer[2];
+	matrix_buffer[2]=matrix_buffer[3];
+	matrix_buffer[3]=matrix_buffer[4];
+	matrix_buffer[4]=matrix_buffer[5];
+	matrix_buffer[5]=matrix_buffer[6];
+	matrix_buffer[6]=matrix_buffer[7];
+	matrix_buffer[7]=matrix_buffer[0];
 }
 
 int main(void)
@@ -336,12 +361,14 @@ int main(void)
 	{
 		update7SEG(index_led);
 		updateLEDMatrix(index_led_matrix);
+
 	}
 	if(index_led>=MAX_LED){
 		index_led=0;
 	}
 	if(index_led_matrix>=MAX_LED_MATRIX){
 		index_led_matrix=0;
+		ShiftToTheLeft();
 	}
     /* USER CODE BEGIN 3 */
   }
