@@ -227,17 +227,7 @@ void clearAllLEDMatrix(){
 }
 const int MAX_LED_MATRIX=8;
 int index_led_matrix=0;
-uint8_t matrix_buffer[8]={
-		  0b00011000,
-		  0b00100100,
-		  0b01000010,
-		  0b01000010,
-		  0b01111110,
-		  0b01000010,
-		  0b01000010,
-		  0b01000010
-
-		};
+uint8_t matrix_buffer[8]={0b00011000,0b00100100,0b01000010,0b01000010,0b01111110,0b01000010,0b01000010,0b01000010};
 void clearAllMatrixCOL(){
 	HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, SET);
 	HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, SET);
@@ -259,22 +249,16 @@ void clearAllMatrixROW(){
 	HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, SET);
 }
 void updateLEDMatrix(int index){
-    // 1. Tắt tất cả cột
     clearAllMatrixCOL();
     clearAllMatrixROW();
-
-    // 2. Xuất dữ liệu cho hàng
-    uint8_t data = matrix_buffer[index];
-    HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, (data & (1<<0)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, (data & (1<<1)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, (data & (1<<2)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, (data & (1<<3)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, (data & (1<<4)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, (data & (1<<5)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, (data & (1<<6)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-    HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, (data & (1<<7)) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-
-    // 3. Bật cột hiện tại
+    HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, (matrix_buffer[index]  & (0b00000001)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, (matrix_buffer[index]  & (0b00000010)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, (matrix_buffer[index]  & (0b00000100)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, (matrix_buffer[index]  & (0b00001000)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, (matrix_buffer[index]  & (0b00010000)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, (matrix_buffer[index]  & (0b00100000)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, (matrix_buffer[index]  & (0b01000000)) ? RESET : SET);
+    HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, (matrix_buffer[index]  & (0b10000000)) ? RESET : SET);
     switch(index){
         case 0: HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, RESET); break;
         case 1: HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, RESET); break;
@@ -287,49 +271,6 @@ void updateLEDMatrix(int index){
     }
 }
 
-/*void chuA(int index){
-	updateLEDMatrix(index);
-	clearAllMatrixROW();
-	switch(index){
-	case 0:
-		HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, RESET);
-		HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, RESET);
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		break;
-	case 1:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, RESET);
-		break;
-	case 2:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, RESET);
-		break;
-	case 3:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, RESET);
-		HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, RESET);
-		break;
-	case 4:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, RESET);
-		HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, RESET);
-		break;
-	case 5:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, RESET);
-		break;
-	case 6:
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, RESET);
-		break;
-	case 7:
-		HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, RESET);
-		HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, RESET);
-		HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
-		break;
-	}
-}
-*/
 int main(void)
 {
   /* USER CODE BEGIN 1 */
