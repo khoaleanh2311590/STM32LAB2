@@ -227,7 +227,16 @@ void clearAllLEDMatrix(){
 }
 const int MAX_LED_MATRIX=8;
 int index_led_matrix=0;
-uint8_t matrix_buffer[8]={0x01 , 0x02 , 0x03 , 0x04 , 0x05 , 0x06 , 0x07 , 0x08};
+uint8_t matrix_buffer[8]={
+		0b00011110, // cột 0
+	    0b00100001, // cột 1
+	    0b01000001, // cột 2
+	    0b01000001, // cột 3
+	    0b01111111, // cột 4
+	    0b01000001, // cột 5
+	    0b01000001, // cột 6
+	    0b01000001  // cột 7
+		};
 void clearAllMatrixCOL(){
 	HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, SET);
 	HAL_GPIO_WritePin(ENM1_GPIO_Port, ENM1_Pin, SET);
@@ -250,6 +259,7 @@ void clearAllMatrixROW(){
 }
 void updateLEDMatrix(int index){
 	clearAllMatrixCOL();
+	clearAllMatrixROW();
 	switch(index){
 	case 0:
 		HAL_GPIO_WritePin(ENM0_GPIO_Port, ENM0_Pin, RESET);
@@ -276,8 +286,16 @@ void updateLEDMatrix(int index){
 		HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, RESET);
 		break;
 	}
+    if(matrix_buffer[index] & (1<<0)) HAL_GPIO_WritePin(ROW0_GPIO_Port, ROW0_Pin, RESET);
+    if(matrix_buffer[index] & (1<<1)) HAL_GPIO_WritePin(ROW1_GPIO_Port, ROW1_Pin, RESET);
+    if(matrix_buffer[index] & (1<<2)) HAL_GPIO_WritePin(ROW2_GPIO_Port, ROW2_Pin, RESET);
+    if(matrix_buffer[index] & (1<<3)) HAL_GPIO_WritePin(ROW3_GPIO_Port, ROW3_Pin, RESET);
+    if(matrix_buffer[index] & (1<<4)) HAL_GPIO_WritePin(ROW4_GPIO_Port, ROW4_Pin, RESET);
+    if(matrix_buffer[index] & (1<<5)) HAL_GPIO_WritePin(ROW5_GPIO_Port, ROW5_Pin, RESET);
+    if(matrix_buffer[index] & (1<<6)) HAL_GPIO_WritePin(ROW6_GPIO_Port, ROW6_Pin, RESET);
+    if(matrix_buffer[index] & (1<<7)) HAL_GPIO_WritePin(ROW7_GPIO_Port, ROW7_Pin, RESET);
 }
-void chuA(int index){
+/*void chuA(int index){
 	updateLEDMatrix(index);
 	clearAllMatrixROW();
 	switch(index){
@@ -319,7 +337,7 @@ void chuA(int index){
 		break;
 	}
 }
-
+*/
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -384,7 +402,7 @@ int main(void)
 	if(isTimerExpired(0)==0)
 	{
 		update7SEG(index_led);
-		chuA(index_led_matrix);
+		updateLEDMatrix(index_led_matrix);
 	}
 	if(index_led>=MAX_LED){
 		index_led=0;
