@@ -285,15 +285,24 @@ void updateLEDMatrix(int index){
         	break;
     }
 }
-void ShiftToTheLeft(){
-	matrix_buffer[0]=matrix_buffer[1];
-	matrix_buffer[1]=matrix_buffer[2];
-	matrix_buffer[2]=matrix_buffer[3];
-	matrix_buffer[3]=matrix_buffer[4];
-	matrix_buffer[4]=matrix_buffer[5];
-	matrix_buffer[5]=matrix_buffer[6];
-	matrix_buffer[6]=matrix_buffer[7];
-	matrix_buffer[7]=matrix_buffer[0];
+void ShiftRightToLeft(){
+    uint8_t msb0 = (matrix_buffer[0] & 0x80) >> 7;
+    uint8_t msb1 = (matrix_buffer[1] & 0x80) >> 7;
+    uint8_t msb2 = (matrix_buffer[2] & 0x80) >> 7;
+    uint8_t msb3 = (matrix_buffer[3] & 0x80) >> 7;
+    uint8_t msb4 = (matrix_buffer[4] & 0x80) >> 7;
+    uint8_t msb5 = (matrix_buffer[5] & 0x80) >> 7;
+    uint8_t msb6 = (matrix_buffer[6] & 0x80) >> 7;
+    uint8_t msb7 = (matrix_buffer[7] & 0x80) >> 7;
+
+    matrix_buffer[0] = (matrix_buffer[0] << 1) | msb0;
+    matrix_buffer[1] = (matrix_buffer[1] << 1) | msb1;
+    matrix_buffer[2] = (matrix_buffer[2] << 1) | msb2;
+    matrix_buffer[3] = (matrix_buffer[3] << 1) | msb3;
+    matrix_buffer[4] = (matrix_buffer[4] << 1) | msb4;
+    matrix_buffer[5] = (matrix_buffer[5] << 1) | msb5;
+    matrix_buffer[6] = (matrix_buffer[6] << 1) | msb6;
+    matrix_buffer[7] = (matrix_buffer[7] << 1) | msb7;
 }
 
 int main(void)
@@ -327,12 +336,25 @@ int main(void)
   updateClockBuffer();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer(0,50);
-  setTimer(1,100);
+  setTimer(0,1000);
+  setTimer(1,1000);
+  setTimer(2,1000);
+  setTimer(3,250);
+  setTimer(4,25);
+  setTimer(5,16);
+  setTimer(6,25);
   while (1)
   {
+	if(isTimerExpired(5)==1){
+		updateLEDMatrix(index_led_matrix);
+		setTimer(5, 16);
+	}
+	if(isTimerExpired(6)==1){
+		update7SEG(index_led);
+		setTimer(6, 25);
+	}
     /* USER CODE END WHILE */
-	if(isTimerExpired(1)==1)
+	if(isTimerExpired(0)==1)
 	{
 		 second ++;
 		 if(second>=60){
@@ -347,33 +369,39 @@ int main(void)
 			 hour=0;
 		 }
 		updateClockBuffer();
+		setTimer(0, 1000);
+	}
+	if(isTimerExpired(1)==1){
 		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		setTimer(1, 1000);
 	}
-	if(isTimerExpired(0)==1)
+	if(isTimerExpired(2)==1){
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		setTimer(2,1000);
+	}
+
+	if(isTimerExpired(3)==1)
 	{
-		setTimer(0, 250);
 		index_led++;
+		if(index_led>=MAX_LED){
+			index_led=0;
+		}
+		setTimer(3, 250);
+	}
+	if(isTimerExpired(4)==1){
 		index_led_matrix++;
+		if(index_led_matrix>=MAX_LED_MATRIX){
+			index_led_matrix=0;
+			ShiftRightToLeft();
+		}
+		setTimer(4,25);
 	}
-	if(isTimerExpired(0)==0)
-	{
-		update7SEG(index_led);
-		updateLEDMatrix(index_led_matrix);
 
-	}
-	if(index_led>=MAX_LED){
-		index_led=0;
-	}
-	if(index_led_matrix>=MAX_LED_MATRIX){
-		index_led_matrix=0;
-		ShiftToTheLeft();
-	}
+
     /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
 
+  /* USER CODE END 3 */
+  }
 }
 
 void SystemClock_Config(void)

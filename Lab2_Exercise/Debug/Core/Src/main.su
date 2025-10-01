@@ -9,10 +9,10 @@ main.c:218:6:clearAllLEDMatrix	8	static
 main.c:231:6:clearAllMatrixCOL	8	static
 main.c:241:6:clearAllMatrixROW	8	static
 main.c:251:6:updateLEDMatrix	16	static
-main.c:288:6:ShiftToTheLeft	4	static
-main.c:299:5:main	8	static
-main.c:379:6:SystemClock_Config	72	static
-main.c:415:13:MX_TIM2_Init	32	static
-main.c:460:13:MX_GPIO_Init	32	static
-main.c:516:6:Error_Handler	4	static,ignoring_inline_asm
-main.c:526:7:HAL_TIM_PeriodElapsedCallback	16	static
+main.c:288:6:ShiftRightToLeft	16	static
+main.c:308:5:main	8	static
+main.c:407:6:SystemClock_Config	72	static
+main.c:443:13:MX_TIM2_Init	32	static
+main.c:488:13:MX_GPIO_Init	32	static
+main.c:544:6:Error_Handler	4	static,ignoring_inline_asm
+main.c:554:7:HAL_TIM_PeriodElapsedCallback	16	static
