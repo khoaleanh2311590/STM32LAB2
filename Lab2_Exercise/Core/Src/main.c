@@ -391,11 +391,10 @@ void Error_Handler(void)
 int counter=25;
 int counter1=100;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if(counter1>0)
-		//HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		counter1--;
+	counter1--;
 	if(counter1<=0)
 {
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 		counter1=100;
 		}
