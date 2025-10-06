@@ -251,9 +251,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   setTimer(0, 250);
   setTimer(1, 10);
+  setTimer(2, 25);
+  setTimer(3,1000);
   while (1)
   {
     /* USER CODE END WHILE */
+	if(isTimerExpired(3)==1)
+	{
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+		setTimer(3, 1000);
+	}
 	if(isTimerExpired(1)==1)
 	{
 		 second ++;
@@ -269,7 +277,6 @@ int main(void)
 			 hour=0;
 		 }
 		updateClockBuffer();
-		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 		setTimer(1, 1000);
 	}
 	if(isTimerExpired(0)==1)
@@ -277,9 +284,10 @@ int main(void)
 		setTimer(0, 250);
 		index_led++;
 	}
-	if(isTimerExpired(0)==0)
+	if(isTimerExpired(2)==1)
 	{
 		update7SEG(index_led);
+		setTimer(2, 25);
 	}
 	if(index_led>=MAX_LED) index_led=0;
 
