@@ -338,7 +338,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 int counter=0;
+int counter1=100;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	counter1--;
+	if(counter1<=0)
+	{
+		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		counter1=100;
+	}
 	if(counter>=0 && counter<50)
 	{
 		HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
